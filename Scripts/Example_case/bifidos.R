@@ -1,3 +1,4 @@
+# estimated run time on Macbook pro (64 GB unified memory) --> less than 5 min
 # set working directory
 setwd("/Users/vincentlamoureux/Library/CloudStorage/")
 
