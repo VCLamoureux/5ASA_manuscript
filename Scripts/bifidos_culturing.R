@@ -1,3 +1,4 @@
+# estimated run time on Macbook pro (64 GB unified memory) --> less than 5 min
 # set working directory
 setwd("/Users/vincentlamoureux/Library/CloudStorage/")
 
@@ -183,24 +184,22 @@ data_clean_3 <- data_clean2 |>
   dplyr::select(filename, '28355') |> 
   left_join(metadata, by = "filename")
 
-df_bile <- data_clean_3 %>%
-  dplyr::transmute(
-    filename,
-    condition = as.character(condition),
+df_bile <- data_clean_3 |> 
+  dplyr::transmute(filename, condition = as.character(condition),
     time_h    = time_h,
-    value     = as.numeric(`28355`)
-  ) %>%
+    value     = as.numeric(`28355`)) |> 
   tidyr::drop_na(condition, value)
 
 # Put control first
 control_name <- "medium"
 other_conds  <- setdiff(sort(unique(df_bile$condition)), control_name)
 
-df_bile_1 <- df_bile %>%
+df_bile_1 <- df_bile |> 
   dplyr::mutate(
     condition = factor(condition, levels = c(control_name, other_conds))) |> 
   dplyr::filter(time_h == 72)
 
+# Export the table for output visualization (uncomment the next line to export the csv file)
 #write_csv(df_bile_1, "OneDrive-UniversityofCalifornia,SanDiegoHealth/Postdoc_UCSD/Postdoc_projects/Bifidos_5ASA_BAs_cultures/bifidos_feature28355_monoculture_data.csv")
 
 
@@ -214,27 +213,21 @@ names(custom_colors_darker) <- levels(df_bile_1$condition)
 # Plot
 p_monoculture <- ggplot(
   df_bile_1,
-  aes(x = condition, y = value, fill = condition, color = condition)
-) +
+  aes(x = condition, y = value, fill = condition, color = condition)) +
   geom_boxplot(
     size  = 0.5,
     alpha = 0.6,
     width = 0.55,
-    outlier.shape = NA
-  ) +
+    outlier.shape = NA) +
   geom_jitter(
     shape    = 19,
     size     = 5,
     alpha    = 1,
     stroke   = NA,
-    position = position_jitter(width = 0.2)
-  ) +
+    position = position_jitter(width = 0.2)) +
   scale_fill_manual(values  = custom_colors) +
   scale_color_manual(values = custom_colors_darker) +
-  labs(
-    x = "Condition",
-    y = "Feature 28355 (intensity)"
-  ) +
+  labs(x = "Condition", y = "Feature 28355 (intensity)") +
   theme_minimal(base_size = 22) +
   theme(
     axis.text.x  = element_text(angle = 90, vjust = 1, hjust = 1, size = 12),
@@ -246,8 +239,7 @@ p_monoculture <- ggplot(
     panel.grid.minor = element_blank(),
     axis.ticks   = element_line(color = "black"),
     axis.ticks.length = unit(0.25, "cm"),
-    legend.position = "none"
-  )
+    legend.position = "none")
 
 p_monoculture
 #ggsave("OneDrive-UniversityofCalifornia,SanDiegoHealth/Postdoc_UCSD/Postdoc_projects/Bifidos_5ASA_BAs_cultures/bifidos_28355_monoculture_boxplot.pdf", plot = p_monoculture, width = 4, height = 7, dpi = 900)
