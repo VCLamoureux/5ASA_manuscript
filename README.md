@@ -6,3 +6,5 @@ We showed that gut bacterial conjugation of 5-aminosalicylic acid (5-ASA) to bil
 # Citation
 To be preprinted
 
+# License
+This work is licensed under MIT license
